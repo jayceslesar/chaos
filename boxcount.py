@@ -67,6 +67,8 @@ fig = make_subplots(rows=1, cols=2,  subplot_titles=("Barnsley's Fern", f"Fracta
 fig.add_trace(go.Scatter(x=x, y=y, mode='markers', marker=dict(size=2, color='magenta')), row=1, col=1)
 fig.add_trace(go.Scatter(x=box_x, y=box_y, marker=dict(size=10, color='magenta')), row=1, col=2)
 fig.update_traces(showlegend=False)
+fig['layout']['xaxis2']['title'] = 'n * ln(2)'
+fig['layout']['yaxis2']['title'] = 'ln(n_boxes)'
 fig.show()
 
 
@@ -80,6 +82,8 @@ fig = make_subplots(rows=1, cols=2,  subplot_titles=("Sierpinski Triangle", f"Fr
 fig.add_trace(go.Scatter(x=x, y=y, mode='markers', marker=dict(size=2, color='limegreen')), row=1, col=1)
 fig.add_trace(go.Scatter(x=box_x, y=box_y, marker=dict(size=10, color='limegreen')), row=1, col=2)
 fig.update_traces(showlegend=False)
+fig['layout']['xaxis2']['title'] = 'n * ln(2)'
+fig['layout']['yaxis2']['title'] = 'ln(n_boxes)'
 fig.show()
 
 
