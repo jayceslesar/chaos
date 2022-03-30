@@ -77,8 +77,8 @@ y = P[:, 1]
 box_x, box_y, dim = boxcount(P, 10)
 
 fig = make_subplots(rows=1, cols=2,  subplot_titles=("Sierpinski Triangle", f"Fractal Dimension: {dim}"))
-fig.add_trace(go.Scatter(x=x, y=y, mode='markers', marker=dict(size=2, color='coral')), row=1, col=1)
-fig.add_trace(go.Scatter(x=box_x, y=box_y, marker=dict(size=10, color='coral')), row=1, col=2)
+fig.add_trace(go.Scatter(x=x, y=y, mode='markers', marker=dict(size=2, color='limegreen')), row=1, col=1)
+fig.add_trace(go.Scatter(x=box_x, y=box_y, marker=dict(size=10, color='limegreen')), row=1, col=2)
 fig.update_traces(showlegend=False)
 fig.show()
 
@@ -93,4 +93,6 @@ fig = make_subplots(rows=1, cols=2,  subplot_titles=("Koch Curve", f"Fractal Dim
 fig.add_trace(go.Scatter(x=x, y=y, mode='markers', marker=dict(size=3, color='blue')), row=1, col=1)
 fig.add_trace(go.Scatter(x=box_x, y=box_y, marker=dict(size=10, color='blue')), row=1, col=2)
 fig.update_traces(showlegend=False)
+fig['layout']['xaxis2']['title'] = 'n * ln(2)'
+fig['layout']['yaxis2']['title'] = 'ln(n_boxes)'
 fig.show()
