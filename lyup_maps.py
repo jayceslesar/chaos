@@ -17,4 +17,8 @@ def henon(x, y, a=1.4, b=0.3):
 
 def ikeda(x, y, R=1, c1=0.4, c2=0.9, c3=6):
     tau = (c1 - c2) / (1 + x**2 + y**2)
-    pass
+
+    new_x = R + c2 * (x * np.cos(tau) - y * np.sin(tau))
+    new_y = c2 * (x * np.sin(tau) + y * np.cos(tau))
+
+    return new_x, new_y
