@@ -1,4 +1,5 @@
 import numpy as np
+import seaborn as sns
 import plotly.graph_objs as go
 from plotly.subplots import make_subplots
 
@@ -29,12 +30,14 @@ def iterate(c4):
 def fourb():
     c4s = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
     colors = ['red', 'orange', 'yellow', 'green', 'blue', 'limegreen', 'magenta', 'gray', 'black']
+    palette = sns.color_palette("gnuplot2_r", 9).as_hex()
+    palette = sns.color_palette("rainbow_r", 9).as_hex()
     fig = make_subplots(rows=1, cols=2,  subplot_titles=("Tinkerbell Map Scatterplot", f"Tinkerbell Map Lineplot"))
 
-    for c4, color in zip(c4s, colors):
+    for c4, color in zip(c4s, palette):
         x, y = iterate(c4)
         fig.add_trace(go.Scattergl(x=x, y=y, mode='markers', name=f'c4={c4}', marker=dict(size=5, color=color), showlegend=False), row=1, col=1)
-        fig.add_trace(go.Scattergl(x=x, y=y, mode='lines', name=f'c4={c4}', marker=dict(size=5, color=color)), row=1, col=2)
+        fig.add_trace(go.Scattergl(x=x, y=y, mode='lines', name=f'c4={c4}', marker=dict(size=3, color=color)), row=1, col=2)
 
     fig.update_layout(showlegend=True)
     fig.show()
