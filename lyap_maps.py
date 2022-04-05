@@ -52,17 +52,17 @@ def ikeda(x, y, R=1, c1=0.4, c2=0.9, c3=6):
 
 
 def ikeda_jacobian(x, y):
-    u1 = None
-    u2 = None
-    u3 = None
-    u4 = None
+    u1 = 1 - (12*x*y / (1 + x**2 + y**2)**2)
+    u2 = (12*x**2 / (1 + x**2 + y**2)**2)
+    u3 = 1 + (12*x*y / (1 + x**2 + y**2)**2)
+    u4 = (12*y**2 / (1 + x**2 + y**2)**2)
 
     tau = 0.4 - (6 / (1 + x**2 + y**2))
 
     jacobian = np.array(
         [
-            [u1*np.cos(t) - u2*sin(tau), -u3*np.sin(tau) - u4*cos(tau)],
-            [u1*np.sin(t) + u2*cos(tau), u3*np.cos(tau) - u4*sin(tau)]
+            [u1*np.cos(tau) - u2*np.sin(tau), -u3*np.sin(tau) - u4*np.cos(tau)],
+            [u1*np.sin(tau) + u2*np.cos(tau), u3*np.cos(tau) - u4*np.sin(tau)]
         ]
     )
 
