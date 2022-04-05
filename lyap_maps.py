@@ -1,6 +1,9 @@
 import numpy as np
 import plotly.graph_objs as go
-from plotly.subplots import make_subplots
+
+
+x_j = 0
+y_j = 0
 
 
 def tinkerbell(x, y, c1=0.9, c2=-0.6, c3=2, c4=0.5):
@@ -10,6 +13,17 @@ def tinkerbell(x, y, c1=0.9, c2=-0.6, c3=2, c4=0.5):
     return new_x, new_y
 
 
+def tinkerbell_jacobian(x, y):
+    jacobian = np.array(
+        [
+            [2*x + 0.9, -2*y - 0.6],
+            [2*y + 2, 2*x + 0.5]
+        ]
+    )
+
+    return jacobian
+
+
 def henon(x, y, a=1.4, b=0.3):
     new_x = 1 - a * x**2 + y
     new_y = b * x
@@ -17,8 +31,19 @@ def henon(x, y, a=1.4, b=0.3):
     return new_x, new_y
 
 
+def henon_jacobian(x, y):
+    jacobian = np.array(
+        [
+            [-2.8*x, 0.3],
+            [1, 0]
+        ]
+    )
+
+    return jacobian
+
+
 def ikeda(x, y, R=1, c1=0.4, c2=0.9, c3=6):
-    tau = (c1 - c3) / (1 + x**2 + y**2)
+    tau = c1 - (c3 / (1 + x**2 + y**2))
 
     new_x = R + c2 * (x * np.cos(tau) - y * np.sin(tau))
     new_y = c2 * (x * np.sin(tau) + y * np.cos(tau))
