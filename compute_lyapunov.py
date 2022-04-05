@@ -1,4 +1,5 @@
 import numpy as np
+from lyup_maps import henon
 
 def get_L(x0,y0, function, iterates=450):
     xs = [x0]
@@ -6,4 +7,15 @@ def get_L(x0,y0, function, iterates=450):
     f_primes = []
     for i in range(iterates):
         new_x, new_y = function(xs[i], ys[i])
-        # TODO: Figure out how to calculate L in two dimensions
+        xs.append(new_x)
+        ys.append(new_y)
+
+        dx = xs[i+1]-xs[i]
+        dy = ys[i+1]-ys[i]
+        dydx = np.gradient(dy, dx)
+        f_primes.append(abs(dydx))
+        # TODO: Fix this so that is actually finding the L per partial differential
+    L_num = np.prod(f_primes)
+    L_exp = np.log(L_num**(1/iterates))
+    return L_exp
+
