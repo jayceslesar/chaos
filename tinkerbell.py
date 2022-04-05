@@ -11,7 +11,7 @@ def tinkerbell(x, y, c1=-0.3, c2=-0.6, c3=2, c4=0.5):
 
 
 def iterate(c4):
-    num_iterates = 50_000
+    num_iterates = 100_000
     x_vals = np.zeros(num_iterates)
     y_vals = np.zeros(num_iterates)
 
