@@ -34,7 +34,7 @@ def henon(x, y, a=1.4, b=0.3):
 def henon_jacobian(x, y):
     jacobian = np.array(
         [
-            [-2.8*x, 0.3],
+            [-2*x, 0.3],
             [1, 0]
         ]
     )
@@ -49,6 +49,24 @@ def ikeda(x, y, R=1, c1=0.4, c2=0.9, c3=6):
     new_y = c2 * (x * np.sin(tau) + y * np.cos(tau))
 
     return new_x, new_y
+
+
+def ikeda_jacobian(x, y):
+    u1 = None
+    u2 = None
+    u3 = None
+    u4 = None
+
+    tau = 0.4 - (6 / (1 + x**2 + y**2))
+
+    jacobian = np.array(
+        [
+            [u1*np.cos(t) - u2*sin(tau), -u3*np.sin(tau) - u4*cos(tau)],
+            [u1*np.sin(t) + u2*cos(tau), u3*np.cos(tau) - u4*sin(tau)]
+        ]
+    )
+
+    return jacobian
 
 
 def iterate(func):
