@@ -1,5 +1,5 @@
 import numpy as np
-from lyup_maps import henon
+from lyap_maps import henon, henon_jacobian
 
 def get_L(x0,y0, function, iterates=450):
     xs = [x0]
@@ -17,5 +17,5 @@ def get_L(x0,y0, function, iterates=450):
         # TODO: Fix this so that is actually finding the L per partial differential
     L_num = np.prod(f_primes)
     L_exp = np.log(L_num**(1/iterates))
-    return L_exp
 
+    return L_exp

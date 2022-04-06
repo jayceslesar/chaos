@@ -85,16 +85,21 @@ def iterate(func):
     return x_vals, y_vals
 
 
-map_funcs = [tinkerbell, henon, ikeda]
-colors = ['magenta', 'limegreen', 'blue']
-titles = ['Tinkerbell Map', 'Henon Map', 'Ikdea Map']
+def main():
+    map_funcs = [tinkerbell, henon, ikeda]
+    colors = ['magenta', 'limegreen', 'blue']
+    titles = ['Tinkerbell Map', 'Henon Map', 'Ikdea Map']
 
-for i, map_func in enumerate(map_funcs):
-    x, y = iterate(map_func)
-    color = colors[i]
-    title = titles[i]
+    for i, map_func in enumerate(map_funcs):
+        x, y = iterate(map_func)
+        color = colors[i]
+        title = titles[i]
 
-    fig = go.Figure()
-    fig.add_trace(go.Scattergl(x=x, y=y, mode='markers', marker=dict(size=2, color=color)))
-    fig.update_layout(title=title)
-    fig.show()
+        fig = go.Figure()
+        fig.add_trace(go.Scattergl(x=x, y=y, mode='markers', marker=dict(size=2, color=color)))
+        fig.update_layout(title=title)
+        fig.show()
+
+
+if __name__ == '__main__':
+    main()
