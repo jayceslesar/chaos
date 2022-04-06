@@ -36,24 +36,25 @@ def get_lyapunov(map_func, func_jacobian):
 
     for i in range(num_iterates):
         jacobian = func_jacobian(xs[i], ys[i])
-        x, y = map_func(xs[i], ys[i])
         z1 = jacobian.dot(w1s[i])
         z2 = jacobian.dot(w2s[i])
-        print(z2)
+
         y1 = z1
-        print(y1)
-        # y2 = z2-z2.dot()
-        # q, r = np.linalg.qr(z)
+        y2 = z2 - z1*(y1/np.linalg.norm(y1))*(y1/np.linalg.norm(y1)) #NOTE: Second mult might be dot
 
-        # ws.append(q)
-        # r1s.append(np.linalg.norm(r[0]))
-        # r2s.append(np.linalg.norm(r[1]))
-        # xs.append(x)
-        # ys.append(y)
+        w1s.append(y1/np.linalg.norm(y1))
+        w2s.append(y2/np.linalg.norm(y2))
 
+        r1s.append(np.linalg.norm(y1))
+        r2s.append(np.linalg.norm(y2))
+
+        x, y = map_func(xs[i], ys[i])
+        xs.append(x)
+        ys.append(y)
 
     # print(np.log(np.abs(np.asarray(r1s))).sum()*(1/num_iterates))
-    # print(np.log(np.abs(np.asarray(r2s))).sum()*(1/num_iterates))
+    print(np.log(np.asarray(r1s).prod()**(1/num_iterates)))
+    print(np.log(np.asarray(r2s).prod()**(1/num_iterates)))
 
 
 get_lyapunov(henon, henon_jacobian)
