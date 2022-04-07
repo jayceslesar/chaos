@@ -44,7 +44,6 @@ def get_lyapunov(map_func, func_jacobian):
     r1s = []
     r2s = []
 
-
     for i in range(num_iterates):
         jacobian = func_jacobian(xs[i], ys[i])
 
@@ -54,8 +53,7 @@ def get_lyapunov(map_func, func_jacobian):
         y1 = deepcopy(z1)
         scalar = (z1.T.dot(y1/np.linalg.norm(y1)))
 
-        y2 = z2 + (scalar*(y1/np.linalg.norm(y1))) # NOTE: the dot represents a dot product
-
+        y2 = - z2 - (scalar*(y1/np.linalg.norm(y1))) # NOTE: the dot represents a dot product
 
         w1s.append(y1/np.linalg.norm(y1))
         w2s.append(y2/np.linalg.norm(y2))
