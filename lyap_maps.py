@@ -25,8 +25,8 @@ def tinkerbell_jacobian(x, y):
 
 
 def henon(x, y, a=1.4, b=0.3):
-    new_x = 1 - a * x**2 + y
-    new_y = b * x
+    new_x = a - x**2 + b*y
+    new_y = x
 
     return new_x, new_y
 
