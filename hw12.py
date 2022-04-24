@@ -198,15 +198,15 @@ def q3():
                 y[i + 1] = y[i] + (y_dot * dt)
                 z[i + 1] = z[i] + (z_dot * dt)
 
-                w = np.array(
-                    [
-                        [1, 0, 0],
-                        [0, 1, 0],
-                        [0, 0, 1]
-                    ]
-                )
+            w = np.array(
+                [
+                    [1, 0, 0],
+                    [0, 1, 0],
+                    [0, 0, 1]
+                ]
+            )
 
-                lyaps_lorenz = np.zeros((num_steps, 3))
+            lyaps_lorenz = np.zeros((num_steps, 3))
 
             for i in range(num_steps):
                 Z = lorenz_jacobian(x[i], y[i], z[i], s=sigma, b=b).dot(w)
