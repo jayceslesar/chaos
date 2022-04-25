@@ -172,8 +172,8 @@ def q2():
 
 
 def q3():
-    sigmas = list(range(61))
-    bs = list(range(11))
+    sigmas = np.arange(0, 60.1, 0.1)
+    bs = np.arange(0, 10.1, 0.1)
 
     dt = 0.01
     num_steps = 10_000
@@ -183,7 +183,7 @@ def q3():
     out_z = []
 
     for sigma in sigmas:
-        print(f"{sigma}/{len(sigmas)}")
+        print(f"{sigma}/{sigmas[-1]}")
         for b in bs:
             for i in range(num_steps - 1):
                 x = np.zeros(num_steps)
