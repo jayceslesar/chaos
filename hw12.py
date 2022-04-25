@@ -228,8 +228,8 @@ def q3():
 
     df = pd.DataFrame()
     df['sigma'] = out_sigma
-    df['b'] = b
-    df['z'] = z
+    df['b'] = out_b
+    df['z'] = out_z
     df.to_csv('lorenz_iterate.csv')
 
     fig = go.Figure(go.Scatter3d(x=out_sigma, y=out_b, z=out_z, mode='markers'))
