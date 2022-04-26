@@ -172,67 +172,124 @@ def q2():
 
 
 def q3():
-    sigmas = np.arange(0, 60.1, 0.1)
-    bs = np.arange(0, 10.1, 0.1)
+    file_exists=True
+    if not file_exists:
+        sigmas = np.arange(0, 60.1, 0.1)
+        bs = np.arange(0, 10.1, 0.1)
 
-    dt = 0.01
-    num_steps = 10_000
+        dt = 0.01
+        num_steps = 10_000
 
-    out_sigma = []
-    out_b = []
-    out_z = []
+        out_sigma = []
+        out_b = []
+        out_z = []
 
-    for sigma in sigmas:
-        print(f"{sigma}/{sigmas[-1]}")
-        for b in bs:
-            for i in range(num_steps - 1):
-                x = np.zeros(num_steps)
-                y = np.zeros(num_steps)
-                z = np.zeros(num_steps)
+        for sigma in sigmas:
+            print(f"{sigma}/{sigmas[-1]}")
+            for b in bs:
+                for i in range(num_steps - 1):
+                    x = np.zeros(num_steps)
+                    y = np.zeros(num_steps)
+                    z = np.zeros(num_steps)
 
-                x[0] = -12.6480
-                y[0] = -13.9758
-                z[0] = 30.9758
-                x_dot, y_dot, z_dot = lorenz(x[i], y[i], z[i], s=sigma, b=b)
-                x[i + 1] = x[i] + (x_dot * dt)
-                y[i + 1] = y[i] + (y_dot * dt)
-                z[i + 1] = z[i] + (z_dot * dt)
+                    x[0] = -12.6480
+                    y[0] = -13.9758
+                    z[0] = 30.9758
+                    x_dot, y_dot, z_dot = lorenz(x[i], y[i], z[i], s=sigma, b=b)
+                    x[i + 1] = x[i] + (x_dot * dt)
+                    y[i + 1] = y[i] + (y_dot * dt)
+                    z[i + 1] = z[i] + (z_dot * dt)
 
-            w = np.array(
-                [
-                    [1, 0, 0],
-                    [0, 1, 0],
-                    [0, 0, 1]
-                ]
-            )
+                w = np.array(
+                    [
+                        [1, 0, 0],
+                        [0, 1, 0],
+                        [0, 0, 1]
+                    ]
+                )
 
-            lyaps_lorenz = np.zeros((num_steps, 3))
+                lyaps_lorenz = np.zeros((num_steps, 3))
 
-            for i in range(num_steps):
-                Z = lorenz_jacobian(x[i], y[i], z[i], s=sigma, b=b).dot(w)
-                w, r = np.linalg.qr(Z)
-                diag = np.diag(r)
-                lyaps_lorenz[i, 0] = np.log(np.abs(diag[0]))
-                lyaps_lorenz[i, 1] = np.log(np.abs(diag[1]))
-                lyaps_lorenz[i, 2] = np.log(np.abs(diag[2]))
+                for i in range(num_steps):
+                    Z = lorenz_jacobian(x[i], y[i], z[i], s=sigma, b=b).dot(w)
+                    w, r = np.linalg.qr(Z)
+                    diag = np.diag(r)
+                    lyaps_lorenz[i, 0] = np.log(np.abs(diag[0]))
+                    lyaps_lorenz[i, 1] = np.log(np.abs(diag[1]))
+                    lyaps_lorenz[i, 2] = np.log(np.abs(diag[2]))
 
-            l1 = np.sum(lyaps_lorenz[:, 0])/num_steps
-            l2 = np.sum(lyaps_lorenz[:, 1])/num_steps
-            l3 = np.sum(lyaps_lorenz[:, 2])/num_steps
+                l1 = np.sum(lyaps_lorenz[:, 0])/num_steps
+                l2 = np.sum(lyaps_lorenz[:, 1])/num_steps
+                l3 = np.sum(lyaps_lorenz[:, 2])/num_steps
 
-            lyaps = [l1, l2, l3]
+                lyaps = [l1, l2, l3]
 
-            out_sigma.append(sigma)
-            out_b.append(b)
-            out_z.append(max(lyaps))
+                out_sigma.append(sigma)
+                out_b.append(b)
+                out_z.append(max(lyaps))
 
-    df = pd.DataFrame()
-    df['sigma'] = out_sigma
-    df['b'] = out_b
-    df['z'] = out_z
-    df.to_csv('lorenz_iterate.csv')
+        df = pd.DataFrame()
+        df['sigma'] = out_sigma
+        df['b'] = out_b
+        df['z'] = out_z
+        df.to_csv('lorenz_iterate.csv')
+    else:
+        df = pd.read_csv('lorenz_iterate.csv')
+        out_sigma = df['sigma']
+        out_b = df['b']
+        out_z = df['z']
 
-    fig = go.Figure(go.Scatter3d(x=out_sigma, y=out_b, z=out_z, mode='markers'))
+    fig = go.Figure(go.Scatter3d(x=out_sigma, y=out_b, z=out_z, mode='markers', marker=dict(size=3, color='blue')))
+    fig.show()
+
+
+
+def q4():
+    dr = 0.1
+    r = np.arange(0, 325, dr)
+    dt = 0.001
+    t = np.arange(0, 10, dt)
+
+    # initialize solution arrays
+    xs = np.empty(len(t) + 1)
+    ys = np.empty(len(t) + 1)
+    zs = np.empty(len(t) + 1)
+
+    xs[0], ys[0], zs[0] = (1, 1, 1)
+
+    r_maxes = []
+    z_maxes = []
+    r_mins = []
+    z_mins = []
+
+    for R in r:
+        print(R)
+        for i in range(len(t)):
+            x_dot, y_dot, z_dot = lorenz(xs[i], ys[i], zs[i], r=R)
+            xs[i + 1] = xs[i] + (x_dot * dt)
+            ys[i + 1] = ys[i] + (y_dot * dt)
+            zs[i + 1] = zs[i] + (z_dot * dt)
+        for i in range(2, len(zs) - 2):
+            if zs[i - 2] < zs[i] and zs[i] > zs[i + 2]:
+                r_maxes.append(R)
+                z_maxes.append(zs[i])
+            elif zs[i - 2] > zs[i] and zs[i] < zs[i + 2]:
+                r_mins.append(R)
+                z_mins.append(zs[i])
+
+        xs[0], ys[0], zs[0] = xs[i], ys[i], zs[i]
+
+    maxes = [val for val in z_maxes if val > 28 and val < 50]
+    fig = go.Figure(go.Scatter(x=maxes[:-1], y=maxes[1:], mode='markers', marker=dict(size=2, color='blue')))
+    fig.update_xaxes(title='zn')
+    fig.update_yaxes(title='zn + 1')
+    fig.update_layout(title='Recreation of Figure 9.3')
+    fig.show()
+
+    fig = go.Figure(go.Scatter(x=r_maxes, y=z_maxes, mode='markers', marker=dict(size=2, color='blue')))
+    fig.update_xaxes(title='r')
+    fig.update_yaxes(title='z')
+    fig.update_layout(title='Recreation of Figure 9.4')
     fig.show()
 
 
