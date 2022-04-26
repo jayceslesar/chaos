@@ -1,6 +1,8 @@
 import numpy as np
 import plotly.graph_objs as go
 from scipy import signal
+from plotly.subplots import make_subplots
+
 
 import pandas as pd
 
@@ -246,8 +248,8 @@ def q3():
 
 
 def q4a():
-    dt = 0.0001
-    t = np.arange(0, 10, dt)
+    dt = 0.001
+    t = np.arange(0, 5000, dt)
     x_axis = []
 
     # initialize solution arrays
@@ -255,7 +257,7 @@ def q4a():
     ys = np.empty(len(t) + 1)
     zs = np.empty(len(t) + 1)
 
-    xs[0], ys[0], zs[0] = (1, 1, 1)
+    xs[0], ys[0], zs[0] = (-12.6480,  -13.9758, 30.9758)
 
     for i in range(len(t)):
         x_dot, y_dot, z_dot = lorenz(xs[i], ys[i], zs[i], r=28)
@@ -264,9 +266,9 @@ def q4a():
         zs[i + 1] = zs[i] + (z_dot * dt)
         x_axis.append(i)
 
-
-    # fig = go.Figure(go.Scatter(x=z_maxes[:-1], y=z_maxes[1:], mode='markers', marker=dict(size=2, color='blue')))
-    fig = go.Figure(go.Scatter(x=x_axis, y=zs, mode='markers', marker=dict(size=2, color='blue')))
+    peaks, maybe = signal.find_peaks(zs, height=0)
+    peaks = maybe['peak_heights']
+    fig = go.Figure(go.Scatter(x=peaks[:-1], y=peaks[1:], mode='markers', marker=dict(size=10, color='blue')))
     fig.update_xaxes(title='zn')
     fig.update_yaxes(title='zn + 1')
     fig.update_layout(title='Recreation of Figure 9.3')
@@ -319,11 +321,10 @@ def q5():
     zs = [15, 25, 35]
     rs = [12, 24.5, 28]
 
-    colors = ['purple', 'green', 'black', 'red', 'orange', 'blue', 'gray', 'yellow', 'limegreen']
-
-    i = 0
-    for z in zs:
-        for r in rs:
+    fig = make_subplots(rows=3, cols=3)
+    num = 0
+    for i, z in enumerate(zs):
+        for j, r in enumerate(rs):
             xs = []
             ys = []
             maxvals = []
@@ -339,15 +340,13 @@ def q5():
                             maxval = np.real(val)
                     maxvals.append(maxval)
 
+            if num == 0:
+                fig.add_trace(go.Heatmap(x=xs, y=ys, z=maxvals, colorscale="turbo"), row=i+1, col=j+1)
+            else:
+                fig.add_trace(go.Heatmap(x=xs, y=ys, z=maxvals, colorscale="turbo", showlegend=False), row=i+1, col=j+1)
+            num += 1
 
-            df = pd.DataFrame()
-            df['x'] = xs
-            df['y'] = ys
-            df['z'] = maxvals
-            fig = px.scatter_3d(df, x='x', y='y', z='z')
-            fig.update_traces(marker=dict(size=3, color=colors[i]))
-            fig.show()
-            i += 1
+    fig.show()
 
 
 if __name__ == '__main__':
