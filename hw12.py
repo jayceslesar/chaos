@@ -121,6 +121,8 @@ def q1():
 
     frac_fig = go.Figure(frac_dim)
     frac_fig.update_layout(title=f'Fractal Dimension: {dim}')
+    frac_fig.update_yaxes(title=f'ln number of boxes')
+    frac_fig.update_xaxes(title=f'n*ln(2)')
     frac_fig.show()
 
 
@@ -294,4 +296,4 @@ def q4():
 
 
 if __name__ == '__main__':
-    q3()
+    q2()
