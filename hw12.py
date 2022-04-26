@@ -1,5 +1,6 @@
 import numpy as np
 import plotly.graph_objs as go
+from scipy import signal
 
 import pandas as pd
 
@@ -78,7 +79,6 @@ def lorenz_jacobian(x, y, z, s=10, r=28, b=8/3):
         ]
     )
     return jacobian
-
 
 
 def q1():
@@ -245,8 +245,35 @@ def q3():
     fig.show()
 
 
+def q4a():
+    dt = 0.0001
+    t = np.arange(0, 10, dt)
+    x_axis = []
 
-def q4():
+    # initialize solution arrays
+    xs = np.empty(len(t) + 1)
+    ys = np.empty(len(t) + 1)
+    zs = np.empty(len(t) + 1)
+
+    xs[0], ys[0], zs[0] = (1, 1, 1)
+
+    for i in range(len(t)):
+        x_dot, y_dot, z_dot = lorenz(xs[i], ys[i], zs[i], r=28)
+        xs[i + 1] = xs[i] + (x_dot * dt)
+        ys[i + 1] = ys[i] + (y_dot * dt)
+        zs[i + 1] = zs[i] + (z_dot * dt)
+        x_axis.append(i)
+
+
+    # fig = go.Figure(go.Scatter(x=z_maxes[:-1], y=z_maxes[1:], mode='markers', marker=dict(size=2, color='blue')))
+    fig = go.Figure(go.Scatter(x=x_axis, y=zs, mode='markers', marker=dict(size=2, color='blue')))
+    fig.update_xaxes(title='zn')
+    fig.update_yaxes(title='zn + 1')
+    fig.update_layout(title='Recreation of Figure 9.3')
+    fig.show()
+
+
+def q4b():
     dr = 0.1
     r = np.arange(0, 325, dr)
     dt = 0.001
@@ -281,13 +308,6 @@ def q4():
 
         xs[0], ys[0], zs[0] = xs[i], ys[i], zs[i]
 
-    maxes = [val for val in z_maxes if val > 28 and val < 50]
-    fig = go.Figure(go.Scatter(x=maxes[:-1], y=maxes[1:], mode='markers', marker=dict(size=2, color='blue')))
-    fig.update_xaxes(title='zn')
-    fig.update_yaxes(title='zn + 1')
-    fig.update_layout(title='Recreation of Figure 9.3')
-    fig.show()
-
     fig = go.Figure(go.Scatter(x=r_maxes, y=z_maxes, mode='markers', marker=dict(size=2, color='blue')))
     fig.update_xaxes(title='r')
     fig.update_yaxes(title='z')
@@ -295,5 +315,40 @@ def q4():
     fig.show()
 
 
+def q5():
+    zs = [15, 25, 35]
+    rs = [12, 24.5, 28]
+
+    colors = ['purple', 'green', 'black', 'red', 'orange', 'blue', 'gray', 'yellow', 'limegreen']
+
+    i = 0
+    for z in zs:
+        for r in rs:
+            xs = []
+            ys = []
+            maxvals = []
+            for x in np.arange(-25, 25, 0.5):
+                for y in np.arange(-25, 25, 0.5):
+                    xs.append(x)
+                    ys.append(y)
+                    jacob = lorenz_jacobian(x=x, y=y, z=z, r=r)
+                    eigvals = np.linalg.eigvals(jacob)
+                    maxval = np.real(eigvals[0])
+                    for val in eigvals:
+                        if np.real(val) >= maxval:
+                            maxval = np.real(val)
+                    maxvals.append(maxval)
+
+
+            df = pd.DataFrame()
+            df['x'] = xs
+            df['y'] = ys
+            df['z'] = maxvals
+            fig = px.scatter_3d(df, x='x', y='y', z='z')
+            fig.update_traces(marker=dict(size=3, color=colors[i]))
+            fig.show()
+            i += 1
+
+
 if __name__ == '__main__':
-    q2()
+    q4a()
