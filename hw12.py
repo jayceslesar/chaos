@@ -2,7 +2,8 @@ import numpy as np
 import plotly.graph_objs as go
 from scipy import signal
 from plotly.subplots import make_subplots
-
+from ipywidgets import widgets
+from ipywidgets.embed import embed_minimal_html
 
 import pandas as pd
 
@@ -171,7 +172,7 @@ def q2():
         l2 = np.sum(lyaps_lorenz[:, 1])/num_steps
         l3 = np.sum(lyaps_lorenz[:, 2])/num_steps
         print(f"Lyapunov Exponents for r={R}")
-        print(f"{l1=}, {l2=}, {l3=}")
+        print(f"{l1=:.4f}, {l2=:.4f}, {l3=:.4f}")
         print()
 
 
@@ -243,7 +244,14 @@ def q3():
         out_b = df['b']
         out_z = df['z']
 
-    fig = go.Figure(go.Scatter3d(x=out_sigma, y=out_b, z=out_z, mode='markers', marker=dict(size=3, color='blue')))
+    fig = go.Figure(go.Scatter3d(x=out_sigma, y=out_b, z=out_z, mode='markers', marker=dict(size=3, opacity=0.5, color='purple')))
+    # fig = go.Figure(go.Mesh3d(x=out_sigma, y=out_b, z=out_z,opacity=0.5,
+    #                color='rgba(244,22,100,0.6)'))
+    fig.update_layout(scene = dict(
+                    xaxis_title='sigma',
+                    yaxis_title='beta',
+                    zaxis_title='max lyapunov'))
+
     fig.show()
 
 
@@ -321,8 +329,8 @@ def q5():
     zs = [15, 25, 35]
     rs = [12, 24.5, 28]
 
+    figs = []
     fig = make_subplots(rows=3, cols=3)
-    num = 0
     for i, z in enumerate(zs):
         for j, r in enumerate(rs):
             xs = []
@@ -340,14 +348,15 @@ def q5():
                             maxval = np.real(val)
                     maxvals.append(maxval)
 
-            if num == 0:
-                fig.add_trace(go.Heatmap(x=xs, y=ys, z=maxvals, colorscale="turbo"), row=i+1, col=j+1)
-            else:
-                fig.add_trace(go.Heatmap(x=xs, y=ys, z=maxvals, colorscale="turbo", showlegend=False), row=i+1, col=j+1)
-            num += 1
+            fig = go.Figure(go.Heatmap(x=xs, y=ys, z=maxvals, colorscale="turbo"))
+            fig.update_layout(autosize=False, width=500, height=500, title=f"z={i}, r={r}")
+            fig = go.FigureWidget(fig)
 
-    fig.show()
+            figs.append(fig)
+
+    dashboard = widgets.VBox([widgets.HBox([figs[0], figs[1], figs[2]]), widgets.HBox([figs[3], figs[4], figs[5]]), widgets.HBox([figs[6], figs[7], figs[8]])])
+    embed_minimal_html('dashboard.html', views=[dashboard], title='Widgets export')
 
 
 if __name__ == '__main__':
-    q4a()
+    q5()
