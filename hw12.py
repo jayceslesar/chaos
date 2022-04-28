@@ -349,7 +349,7 @@ def q5():
                     maxvals.append(maxval)
 
             fig = go.Figure(go.Heatmap(x=xs, y=ys, z=maxvals, colorscale="turbo"))
-            fig.update_layout(autosize=False, width=500, height=500, title=f"z={i}, r={r}")
+            fig.update_layout(autosize=False, width=500, height=500, title=f"z={z}, r={r}")
             fig = go.FigureWidget(fig)
 
             figs.append(fig)
