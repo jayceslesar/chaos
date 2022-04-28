@@ -276,10 +276,12 @@ def q4a():
 
     peaks, maybe = signal.find_peaks(zs, height=0)
     peaks = maybe['peak_heights']
-    fig = go.Figure(go.Scatter(x=peaks[:-1], y=peaks[1:], mode='markers', marker=dict(size=10, color='blue')))
+    fig = go.Figure(go.Scatter(x=peaks[:-1], y=peaks[1:], mode='markers', name='zn vs zn + 1', marker=dict(size=10, color='blue')))
+    fig.add_trace(go.Scatter(x=peaks, y=peaks, mode='lines', marker=dict(color='red'), name="y=x"))
     fig.update_xaxes(title='zn')
     fig.update_yaxes(title='zn + 1')
     fig.update_layout(title='Recreation of Figure 9.3')
+    fig.update_layout(autosize=False, width=1200, height=1200)
     fig.show()
 
 
@@ -359,4 +361,4 @@ def q5():
 
 
 if __name__ == '__main__':
-    q5()
+    q4a()
